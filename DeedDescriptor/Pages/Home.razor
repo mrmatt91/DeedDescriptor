@@ -1,0 +1,60 @@
+﻿@page "/"
+@using DeedDescriptor.Objects
+
+<RadzenFileInput @bind-Value=@bearingAndDistanceRawData TValue="byte[]" Style="width: 100%"
+                 Change=@(args => OnChange(args, "FileInput")) 
+                 Error=@(args => OnError(args, "FileInput")) 
+                 InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})"
+                 />
+
+@* <RadzenDataGrid >
+
+</RadzenDataGrid> *@
+
+@code{
+    private byte[] bearingAndDistanceRawData = null;
+
+    void OnChange(byte[] value, string name)
+    {
+        var base64StringData = System.Text.Encoding.UTF8.GetString(bearingAndDistanceRawData, 0, bearingAndDistanceRawData.Length);
+        var decodedByteArray = Convert.FromBase64String(base64StringData.Split(',')[1]);
+
+        List<Shape> shapes = new List<Shape>();
+        using (StreamReader reader = new StreamReader(new MemoryStream(decodedByteArray)))
+        {
+            var line = string.Empty;
+            while ((line = reader.ReadLine()) != null)
+            {
+                var header = GetHeader(line);
+                if (!shapes.Any() || shapes.FirstOrDefault().Point != header.Item1) //Item1 represents a point
+                {
+                    var shapeData = reader.ReadLine();
+                    if (shapeData.Trim().StartsWith("Arc"))
+                    {
+                        shapes.Add(BuildCurve());
+                    }
+                    else
+                    {
+                        shapes.Add(new Line());
+                    }
+                    // if (lineData != null)
+                    // {
+                    //     lines.Add(BuildLine(lineObj, lineData));
+                    //     flowLayoutPanel1.Controls.Add(new BearingDistance(lineObj));
+                    // }
+                }
+            }
+        }
+    }
+
+    private (string,string) GetHeader(string headerRow)
+    {
+        var headerRowValues = headerRow.Replace("\t", "").Replace("\n", "").Replace("\r", "").Replace("\v", "").Replace("\f", "").Split(' ',2);
+        return (headerRowValues[0].Trim(), headerRowValues[1].Trim());
+    }
+
+    void OnError(UploadErrorEventArgs args, string name)
+    {
+        //console.Log($"{args.Message}");
+    }
+}
