@@ -2,11 +2,11 @@
 {
     public class Curve : Shape
     {
-        public string? Arc { get; set; }
-        public string? Chord { get; set; }
-        public string? Radius { get; set; }
+        public decimal? Arc { get; set; }
+        public decimal? Chord { get; set; }
+        public decimal? Radius { get; set; }
 
-        public string? Tangent { get; set; }
+        public decimal? Tangent { get; set; }
 
         public Curve(string point, string description)
         {
@@ -16,12 +16,30 @@
 
         public Curve() { }
 
-        public Curve(string? arc, string? chord, string? radius, string? tangent)
+        public Curve(string point, string description, string? arc, string? chord, string? radius, string? tangent)
         {
-            Arc = arc;
-            Chord = chord;
-            Radius = radius;
-            Tangent = tangent;
+            Point = point;
+            Description = description;
+            Arc = decimal.Parse(arc.Replace("Arc",""));
+            Chord = decimal.Parse(chord.Replace("Chord", ""));
+            Radius = decimal.Parse(radius.Replace("Radius", ""));
+            Tangent = decimal.Parse(tangent.Replace("Tangent", ""));
+        }
+
+        public override void Clone(Shape shape)
+        {
+            var curveObj = (Curve)shape;
+            Point = curveObj.Point;
+            Description = curveObj.Description;
+            Arc = curveObj.Arc;
+            Chord = curveObj.Chord;
+            Radius = curveObj.Radius;
+            Tangent = curveObj.Tangent;
+        }
+
+        public override string ShapeToTextTranslation()
+        {
+            return base.ShapeToTextTranslation();
         }
     }
 }

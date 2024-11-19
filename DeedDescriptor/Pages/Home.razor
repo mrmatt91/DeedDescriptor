@@ -2,24 +2,244 @@
 @using DeedDescriptor.Objects
 
 <RadzenFileInput @bind-Value=@bearingAndDistanceRawData TValue="byte[]" Style="width: 100%"
-                 Change=@(args => OnChange(args, "FileInput")) 
-                 Error=@(args => OnError(args, "FileInput")) 
-                 InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})"
-                 />
-
-@* <RadzenDataGrid >
-
-</RadzenDataGrid> *@
-
-@code{
+                 Change=@(args => OnChange(args, "FileInput"))
+                 Error=@(args => OnError(args, "FileInput"))
+                 InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})" />
+<RadzenStack>
+    <RadzenDataGrid @ref="shapeDataGrid" EditMode="@editMode" Data="shapes" TItem="Shape" Context="shape">
+        <HeaderTemplate>
+    
+        </HeaderTemplate>
+        <Columns>
+            <RadzenDataGridColumn TItem="Shape" Context="shape">
+            <EditTemplate Context="shape">
+                @if (shape is Line)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Direction: " />
+                        <RadzenDropDown @bind-Value=((Line)shape).Direction1 Data=@directions />
+                    </RadzenStack>
+                }
+                else if (shape is Curve)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Arc: " />
+                        <RadzenNumeric @bind-Value=((Curve)shape).Arc />
+                    </RadzenStack>
+                }
+            </EditTemplate>
+            <Template Context="shape">
+                @if (shape is Line)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Direction: " />
+                        <RadzenText Text="@(((Line)shape).Direction1)" />
+                    </RadzenStack>
+                }
+                else if (shape is Curve)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Arc: " />
+                        <RadzenText Text="@(((Curve)shape).Arc.ToString())" />
+                    </RadzenStack>
+                }
+            </Template>
+        </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Shape" Context="shape">
+            <EditTemplate Context="shape">
+                @if (shape is Line)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Degrees: " />
+                        <RadzenNumeric @bind-Value=((Line)shape).Degrees />
+                    </RadzenStack>
+                }
+                else if (shape is Curve)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Chord: " />
+                        <RadzenNumeric @bind-Value=((Curve)shape).Chord />
+                    </RadzenStack>
+                }
+            </EditTemplate>
+            <Template Context="shape">
+                @if (shape is Line)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Degrees: " />
+                        <RadzenText Text="@(((Line)shape).Degrees)" />
+                    </RadzenStack>
+                }
+                else if (shape is Curve)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Chord: " />
+                        <RadzenText Text="@(((Curve)shape).Chord.ToString())" />
+                    </RadzenStack>
+                }
+            </Template>
+        </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Shape" Context="shape">
+            <EditTemplate Context="shape">
+                @if (shape is Line)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Minutes: " />
+                        <RadzenNumeric @bind-Value=((Line)shape).Minutes />
+                    </RadzenStack>
+                }
+                else if (shape is Curve)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Chord: " />
+                        <RadzenNumeric @bind-Value=((Curve)shape).Radius />
+                    </RadzenStack>
+                }
+            </EditTemplate>
+            <Template Context="shape">
+                @if (shape is Line)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Minutes: " />
+                        <RadzenText Text="@(((Line)shape).Minutes)" />
+                    </RadzenStack>
+                }
+                else if (shape is Curve)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Radius: " />
+                        <RadzenText Text="@(((Curve)shape).Radius.ToString())" />
+                    </RadzenStack>
+                }
+            </Template>
+        </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Shape" Context="shape">
+            <EditTemplate Context="shape">
+                @if (shape is Line)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Seconds: " />
+                        <RadzenNumeric @bind-Value=((Line)shape).Seconds />
+                    </RadzenStack>
+                }
+                else if (shape is Curve)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Tangent: " />
+                        <RadzenNumeric @bind-Value=((Curve)shape).Tangent />
+                    </RadzenStack>
+                }
+            </EditTemplate>
+            <Template Context="shape">
+                @if (shape is Line)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Seconds: " />
+                        <RadzenText Text="@(((Line)shape).Seconds)" />
+                    </RadzenStack>
+                }
+                else if (shape is Curve)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Tangent: " />
+                        <RadzenText Text="@(((Curve)shape).Tangent.ToString())" />
+                    </RadzenStack>
+                }
+            </Template>
+        </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Shape" Context="shape">
+            <EditTemplate Context="shape">
+                @if (shape is Line)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Direction 2: " />
+                        <RadzenDropDown @bind-Value=((Line)shape).Direction2 Data=@directions />
+                    </RadzenStack>
+                }
+            </EditTemplate>
+            <Template Context="shape">
+                @if (shape is Line)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Direction 2: " />
+                        <RadzenText Text="@(((Line)shape).Direction2)" />
+                    </RadzenStack>
+                }
+            </Template>
+        </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Shape" Context="shape">
+            <EditTemplate Context="shape">
+                @if (shape is Line)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Distance: " />
+                        <RadzenNumeric @bind-Value=((Line)shape).Distance />
+                    </RadzenStack>
+                }
+            </EditTemplate>
+            <Template Context="shape">
+                @if (shape is Line)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenText Text="Distance: " />
+                        <RadzenText Text="@(((Line)shape).Distance.ToString())" />
+                    </RadzenStack>
+                }
+            </Template>
+        </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Shape" Context="shape">
+            <EditTemplate Context="shape">
+                <RadzenStack Orientation="Orientation.Horizontal">
+                    <RadzenText Text="Description: " />
+                    <RadzenTextArea @bind-Value=shape.Description />
+                </RadzenStack>
+            </EditTemplate>
+            <Template Context="shape">
+                <RadzenStack Orientation="Orientation.Horizontal">
+                    <RadzenText Text="Description: " />
+                    <RadzenText Text=@shape.Description />
+                </RadzenStack>
+            </Template>
+        </RadzenDataGridColumn>
+            <RadzenDataGridColumn Context="shape" Filterable="false" Sortable="false" TextAlign="TextAlign.Right" Frozen="true" FrozenPosition="FrozenColumnPosition.Right">
+            <Template Context="shape">
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@(args => EditRow(shape))" @onclick:stopPropagation="true">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" class="rz-my-1 rz-ms-1" Click="@(args => DeleteRow(shape))" @onclick:stopPropagation="true">
+                </RadzenButton>
+            </Template>
+            <EditTemplate Context="shape">
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@((args) => SaveRow(shape))" aria-label="Save">
+                </RadzenButton>
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium" class="rz-my-1 rz-ms-1" Click="@((args) => CancelEdit(shape))" aria-label="Cancel">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" class="rz-my-1 rz-ms-1" Click="@(args => DeleteRow(shape))" aria-label="Delete">
+                </RadzenButton>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+    @if(shapes != null && shapes.Any())
+    {
+        <RadzenTextArea Style="width:100%;height:100%;word-wrap:normal;" Value=@string.Join("",shapes.Select(s => s.ShapeToTextTranslation())) />
+    }
+</RadzenStack>
+@code {
     private byte[] bearingAndDistanceRawData = null;
+    private List<Shape> shapes { get; set; }
+    private Shape shapeToInsert = new Shape();
+    private Shape shapeToUpdate = new Shape();
+    private List<string> directions = new List<string> { "N", "S", "E", "W" };
+    private RadzenDataGrid<Shape> shapeDataGrid;
+    DataGridEditMode editMode = DataGridEditMode.Single;
+
 
     void OnChange(byte[] value, string name)
     {
         var base64StringData = System.Text.Encoding.UTF8.GetString(bearingAndDistanceRawData, 0, bearingAndDistanceRawData.Length);
         var decodedByteArray = Convert.FromBase64String(base64StringData.Split(',')[1]);
 
-        List<Shape> shapes = new List<Shape>();
+        shapes = new List<Shape>();
         using (StreamReader reader = new StreamReader(new MemoryStream(decodedByteArray)))
         {
             var line = string.Empty;
@@ -29,28 +249,74 @@
                 if (!shapes.Any() || shapes.FirstOrDefault().Point != header.Item1) //Item1 represents a point
                 {
                     var shapeData = reader.ReadLine();
-                    if (shapeData.Trim().StartsWith("Arc"))
+                    if (shapeData != null)
                     {
-                        shapes.Add(BuildCurve());
+                        if (shapeData.Trim().StartsWith("Arc"))
+                        {
+                            var chordData = reader.ReadLine();
+                            var radiusData = reader.ReadLine();
+                            var tangentData = reader.ReadLine();
+                            shapes.Add(new Curve(header.Item1, header.Item2, shapeData, chordData, radiusData, tangentData));
+                        }
+                        else
+                        {
+                            shapes.Add(new Line(header.Item1, header.Item2, shapeData));
+                        }
                     }
-                    else
-                    {
-                        shapes.Add(new Line());
-                    }
-                    // if (lineData != null)
-                    // {
-                    //     lines.Add(BuildLine(lineObj, lineData));
-                    //     flowLayoutPanel1.Controls.Add(new BearingDistance(lineObj));
-                    // }
                 }
             }
         }
     }
 
-    private (string,string) GetHeader(string headerRow)
+    private (string, string) GetHeader(string headerRow)
     {
-        var headerRowValues = headerRow.Replace("\t", "").Replace("\n", "").Replace("\r", "").Replace("\v", "").Replace("\f", "").Split(' ',2);
+        var headerRowValues = headerRow.Replace("\t", " ").Replace("\n", " ").Replace("\r", " ").Replace("\v", " ").Replace("\f", " ").Split(' ', 2);
         return (headerRowValues[0].Trim(), headerRowValues[1].Trim());
+    }
+
+    void Reset()
+    {
+        shapeToInsert = new Shape();
+        shapeToUpdate = new Shape();
+    }
+
+    async Task EditRow(Shape shape)
+    {
+
+        if (editMode == DataGridEditMode.Single)
+        {
+            Reset();
+        }
+
+        shapeToUpdate = (shape is Line) ? new Line() : new Curve();
+        shapeToUpdate.Clone(shape);
+        
+
+        await shapeDataGrid.EditRow(shape);
+    }
+
+    async Task SaveRow(Shape shape)
+    {
+        await shapeDataGrid.UpdateRow(shape);
+    }
+
+    void CancelEdit(Shape shape)
+    {
+        shape.Clone(shapeToUpdate);
+        Reset();
+        shapeDataGrid.CancelEditRow(shape);
+    }
+
+    async Task DeleteRow(Shape shape)
+    {
+        Reset();
+
+        if (!shapes.Contains(shape))
+        {
+            shapeDataGrid.CancelEditRow(shape);
+        }
+
+        await shapeDataGrid.Reload();
     }
 
     void OnError(UploadErrorEventArgs args, string name)
