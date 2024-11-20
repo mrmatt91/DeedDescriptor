@@ -7,11 +7,11 @@ namespace DeedDescriptor.Objects
     public class Line : Shape
     {
         public string FirstValue { get; set; }
-        public string Direction1 { get; set; }
+        public string Bearing { get; set; }
         public string Degrees { get; set; }
         public string Minutes { get; set; }
         public string Seconds { get; set; }
-        public string Direction2 { get; set; }
+        public string Direction { get; set; }
 
         public decimal Distance { get; set; }
 
@@ -21,15 +21,15 @@ namespace DeedDescriptor.Objects
             Point = point;
             Description = description;
         }
-        public Line(string point, string firstValue, string direction1, string degrees, string minutes, string seconds, string direction2, decimal distance, string description)
+        public Line(string point, string firstValue, string bearing, string degrees, string minutes, string seconds, string direction, decimal distance, string description)
         {
             Point = point;
             FirstValue = firstValue;
-            Direction1 = direction1;
+            Bearing = bearing;
             Degrees = degrees;
             Minutes = minutes;
             Seconds = seconds;
-            Direction2 = direction2;
+            Direction = direction;
             Distance = distance;
             Description = description;
         }
@@ -41,11 +41,11 @@ namespace DeedDescriptor.Objects
             var escapedLine = lineData.Replace("\t", " ").Replace("\n", " ").Replace("\r", " ").Replace("\v", " ").Replace("\f", " ").Replace("To Cntr. Pt.", " ");
             var lineSegments = escapedLine.Trim().Split(' ', 7, StringSplitOptions.RemoveEmptyEntries);
             FirstValue = lineSegments[0];
-            Direction1 = lineSegments[1];
+            Bearing = lineSegments[1];
             Degrees = lineSegments[2].Substring(0, lineSegments[2].Length - 1);
             Minutes = lineSegments[3].Substring(0, lineSegments[3].Length - 1);
             Seconds = lineSegments[4].Substring(0, lineSegments[4].Length - 1);
-            Direction2 = lineSegments[5];
+            Direction = lineSegments[5];
             if (!preceedsCurve)
             {
                 Distance = decimal.Parse(lineSegments[6]);
@@ -58,11 +58,11 @@ namespace DeedDescriptor.Objects
             Point = lineObj.Point;
             Description = lineObj.Description;
             FirstValue = lineObj.FirstValue;
-            Direction1 = lineObj.Direction1;
+            Bearing = lineObj.Bearing;
             Degrees = lineObj.Degrees;
             Minutes = lineObj.Minutes;
             Seconds = lineObj.Seconds;
-            Direction2 = lineObj.Direction2;
+            Direction = lineObj.Direction;
             Distance = lineObj.Distance;
         }
 
@@ -70,11 +70,11 @@ namespace DeedDescriptor.Objects
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("a bearing of ");
-            stringBuilder.Append($"{HelperCollections.DirectionMap[Direction1]} ");
+            stringBuilder.Append($"{HelperCollections.DirectionMap[Bearing]} ");
             stringBuilder.Append($"{int.Parse(Degrees).ToWords()} ({Degrees}) degrees ");
             stringBuilder.Append($"{int.Parse(Minutes).ToWords()} ({Minutes}) minutes ");
             stringBuilder.Append($"{int.Parse(Seconds).ToWords()} ({Seconds}) seconds ");
-            stringBuilder.Append($"{HelperCollections.DirectionMap[Direction2]} ");
+            stringBuilder.Append($"{HelperCollections.DirectionMap[Direction]} ");
 
             var distanceValues = Distance.ToString().Split('.');
             var distanceValue1 = int.Parse(distanceValues[0]);
