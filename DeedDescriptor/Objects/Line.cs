@@ -56,7 +56,7 @@ namespace DeedDescriptor.Objects
         public override string TranslateToDeedDescription()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"a bearing{(PreceedsCurve ? ", that is radial to the curve," : "")} of {Bearing.TranslateToDeedDescription()} ");
+            stringBuilder.Append($"a bearing{(PreceedsCurve ? ", that is radial to the curve," : "")} of {Bearing.TranslateToDeedDescription()}");
 
             var distanceValues = Distance.ToString().Split('.');
             var distanceValue1 = int.Parse(distanceValues[0]);

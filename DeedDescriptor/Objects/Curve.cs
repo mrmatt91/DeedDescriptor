@@ -94,7 +94,7 @@ namespace DeedDescriptor.Objects
             }
 
             // Determine if the curve is extending to the right or left
-            return $"extending to the {(bearingDifference > 0 ? "right" : "left")} ";
+            return $"extending to the {(bearingDifference > 0 ? "right" : "left")}";
         }
 
     }
