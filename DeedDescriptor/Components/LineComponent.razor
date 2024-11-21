@@ -1,0 +1,21 @@
+﻿@using DeedDescriptor.Objects
+
+<ShapeComponent Shape="@Line">
+    <ShapeType>
+        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-on-secondary-lighter">Line</RadzenText>
+    </ShapeType>
+    <MainContent>
+        <BearingComponent Bearing="Line.Bearing" />
+        <RadzenRow>
+            <RadzenColumn Size="12">
+                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-mb-0">Distance</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1">@(Line.Distance.ToString())</RadzenText>
+            </RadzenColumn>
+        </RadzenRow>
+    </MainContent>
+</ShapeComponent>
+
+@code {
+    [Parameter]
+    public Line Line { get; set; }
+}

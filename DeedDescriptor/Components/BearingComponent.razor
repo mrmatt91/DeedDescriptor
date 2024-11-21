@@ -1,0 +1,40 @@
+﻿@using DeedDescriptor.Objects
+<RadzenRow>
+    <RadzenColumn Size="12" SizeMD="12" SizeLG="12">
+        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-on-secondary-lighter">@((string.IsNullOrEmpty(Title) ? "Bearing" : Title))</RadzenText>
+    </RadzenColumn>
+</RadzenRow>
+<RadzenRow Gap="0">
+    <RadzenColumn Size="4" SizeMD="6" SizeLG="2">
+        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-mb-0">Bearing Direction</RadzenText>
+        <RadzenText TextStyle="TextStyle.Body2">@(Bearing.PrimaryDirection)</RadzenText>
+    </RadzenColumn>
+    <RadzenColumn Size="4" SizeMD="6" SizeLG="2">
+        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-mb-0">Degrees</RadzenText>
+        <RadzenText TextStyle="TextStyle.Body2">@(Bearing.Degrees)</RadzenText>
+    </RadzenColumn>
+    <RadzenColumn Size="4" SizeMD="6" SizeLG="2">
+        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-mb-0">Minutes</RadzenText>
+        <RadzenText TextStyle="TextStyle.Body2">@(Bearing.Minutes)</RadzenText>
+    </RadzenColumn>
+    <RadzenColumn Size="4" SizeMD="6" SizeLG="2">
+        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-mb-0">Seconds</RadzenText>
+        <RadzenText TextStyle="TextStyle.Body2">@(Bearing.Seconds)</RadzenText>
+    </RadzenColumn>
+    <RadzenColumn Size="4" SizeMD="6" SizeLG="2">
+        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-mb-0">Direction</RadzenText>
+        <RadzenText TextStyle="TextStyle.Body2">@(Bearing.SecondaryDirection)</RadzenText>
+    </RadzenColumn>
+</RadzenRow>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public Bearing Bearing { get; set; }
+
+    [Parameter]
+    public RenderFragment MainContent { get; set; }
+
+}

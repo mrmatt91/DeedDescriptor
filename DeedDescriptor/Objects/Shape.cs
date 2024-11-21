@@ -1,6 +1,6 @@
 ﻿namespace DeedDescriptor.Objects
 {
-    public class Shape
+    public abstract class Shape : IDescriptionTranslator
     {
         public string Point { get; set; }
 
@@ -8,9 +8,6 @@
 
         public virtual void Clone(Shape shape) { }
 
-        public virtual string ShapeToTextTranslation() 
-        {
-            return "";
-        }
+        public abstract string TranslateToDeedDescription();
     }
 }

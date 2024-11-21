@@ -7,13 +7,9 @@ namespace DeedDescriptor.Objects
     public class Line : Shape
     {
         public string FirstValue { get; set; }
-        public string Bearing { get; set; }
-        public string Degrees { get; set; }
-        public string Minutes { get; set; }
-        public string Seconds { get; set; }
-        public string Direction { get; set; }
-
         public decimal Distance { get; set; }
+        public Bearing Bearing { get; set; }
+        public bool PreceedsCurve { get; set; }
 
         public Line() { }
         public Line(string point, string description)
@@ -21,15 +17,11 @@ namespace DeedDescriptor.Objects
             Point = point;
             Description = description;
         }
-        public Line(string point, string firstValue, string bearing, string degrees, string minutes, string seconds, string direction, decimal distance, string description)
+        public Line(string point, string firstValue, char primaryDirection, int degrees, int minutes, int seconds, char direction, decimal distance, string description)
         {
             Point = point;
             FirstValue = firstValue;
-            Bearing = bearing;
-            Degrees = degrees;
-            Minutes = minutes;
-            Seconds = seconds;
-            Direction = direction;
+            Bearing = new Bearing(primaryDirection, degrees, minutes, seconds, direction);
             Distance = distance;
             Description = description;
         }
@@ -37,16 +29,15 @@ namespace DeedDescriptor.Objects
         {
             Point = point;
             Description = description;
-            var preceedsCurve = lineData.Contains("To Cntr. Pt.");
+			PreceedsCurve = lineData.Contains("To Cntr. Pt.");
             var escapedLine = lineData.Replace("\t", " ").Replace("\n", " ").Replace("\r", " ").Replace("\v", " ").Replace("\f", " ").Replace("To Cntr. Pt.", " ");
             var lineSegments = escapedLine.Trim().Split(' ', 7, StringSplitOptions.RemoveEmptyEntries);
+
             FirstValue = lineSegments[0];
-            Bearing = lineSegments[1];
-            Degrees = lineSegments[2].Substring(0, lineSegments[2].Length - 1);
-            Minutes = lineSegments[3].Substring(0, lineSegments[3].Length - 1);
-            Seconds = lineSegments[4].Substring(0, lineSegments[4].Length - 1);
-            Direction = lineSegments[5];
-            if (!preceedsCurve)
+
+            Bearing = new Bearing(lineSegments.Skip(1).Take(5).ToArray());
+
+            if (!PreceedsCurve)
             {
                 Distance = decimal.Parse(lineSegments[6]);
             }
@@ -58,23 +49,14 @@ namespace DeedDescriptor.Objects
             Point = lineObj.Point;
             Description = lineObj.Description;
             FirstValue = lineObj.FirstValue;
-            Bearing = lineObj.Bearing;
-            Degrees = lineObj.Degrees;
-            Minutes = lineObj.Minutes;
-            Seconds = lineObj.Seconds;
-            Direction = lineObj.Direction;
+			Bearing = new Bearing(lineObj.Bearing);
             Distance = lineObj.Distance;
         }
 
-        public override string ShapeToTextTranslation()
+        public override string TranslateToDeedDescription()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append("a bearing of ");
-            stringBuilder.Append($"{HelperCollections.DirectionMap[Bearing]} ");
-            stringBuilder.Append($"{int.Parse(Degrees).ToWords()} ({Degrees}) degrees ");
-            stringBuilder.Append($"{int.Parse(Minutes).ToWords()} ({Minutes}) minutes ");
-            stringBuilder.Append($"{int.Parse(Seconds).ToWords()} ({Seconds}) seconds ");
-            stringBuilder.Append($"{HelperCollections.DirectionMap[Direction]} ");
+            stringBuilder.Append($"a bearing{(PreceedsCurve ? ", that is radial to the curve," : "")} of {Bearing.TranslateToDeedDescription()} ");
 
             var distanceValues = Distance.ToString().Split('.');
             var distanceValue1 = int.Parse(distanceValues[0]);
@@ -86,26 +68,25 @@ namespace DeedDescriptor.Objects
                 {
                     var distance1Values = ((decimal)distanceValue1 / 100).ToString().Split('.');
                     var hundredsString = (int.Parse(distance1Values[0]) * 100).ToWords();
-                    var decimalValue = (distance1Values.Length > 1 ? (int.Parse(distance1Values[1])).ToWords() : "");
-                    distanceString1 = $"{hundredsString} {decimalValue}";
+                    var tensString = (distance1Values.Length > 1 ? (int.Parse(distance1Values[1])).ToWords() : "");
+                    distanceString1 = $"{hundredsString} {tensString}";
                 }
                 else
                 {
                     distanceString1 = int.Parse(distanceValues[0]).ToWords();
                 }
 
-                var distanceString2 = string.Empty;
                 decimal distanceValue2 = Decimal.Parse(distanceValues[1]);
 
                 if (distanceValue2 > 100)
                 {
-                    distanceValue2 = Math.Round(((distanceValue2 / 100) * 10), MidpointRounding.AwayFromZero);
+                    distanceValue2 = Math.Round(distanceValue2 / 100 * 10, MidpointRounding.AwayFromZero);
                 }
-
                 var distanceValue2Int = distanceValue2;
-                distanceString2 = ((int)distanceValue2Int).ToWords();
+                string distanceString2 = ((int)distanceValue2).ToWords();
 
-                stringBuilder.Append($"with a distance of {distanceString1} and {(distanceValues[1] == "00" ? "no" : distanceString2)} one-hundredths ({distanceValues[0]}.{(distanceValue2Int == 0 ? "00" : distanceValue2Int)}) ");
+
+                stringBuilder.Append($"with a distance of {distanceString1} and {(distanceValues[1] == "00" ? "no" : distanceString2)} one-hundredths ({distanceValues[0]}.{(distanceValue2Int == 0 ? "00" : distanceValue2)}) feet ");
             }
             var isFirstLetterVowelOrY = HelperCollections.VowelList.Contains(Description.First());
             stringBuilder.Append($"to {(isFirstLetterVowelOrY ? "an" : "a")} {Description}; ");

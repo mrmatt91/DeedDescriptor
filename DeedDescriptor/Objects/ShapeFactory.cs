@@ -14,7 +14,7 @@
             {
                 // Parse the input string and create a Curve object
                 // Assuming curveData contains the required properties for Curve
-                return new Curve("","","ArcValue", "ChordValue", "RadiusValue", "TangentValue");
+                return new Curve();
             }
             else
             {

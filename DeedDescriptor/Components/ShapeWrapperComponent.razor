@@ -1,0 +1,21 @@
+﻿@using DeedDescriptor.Objects
+
+@switch (Shape)
+{
+    case Line line:
+        <LineComponent Line="line" />
+        break;
+    case Curve curve:
+        <CurveComponent Curve="curve" />
+        break;
+    default:
+        <RadzenCard>
+            <RadzenText TextStyle="TextStyle.Body2">Unknown shape</RadzenText>
+        </RadzenCard>
+        break;
+}
+
+@code {
+    [Parameter]
+    public Shape Shape { get; set; }
+}

@@ -1,0 +1,34 @@
+﻿@using DeedDescriptor.Objects
+@inherits ShapeComponent
+<ShapeComponent Shape="@Curve">
+    <ShapeType>
+        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-on-secondary-lighter">Curve</RadzenText>
+    </ShapeType>
+    <MainContent>
+        <RadzenRow>
+            <RadzenColumn Size="4" SizeMD="6" SizeLG="2">
+                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-mb-0">Arc</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1">@(Curve.Arc.ToString())</RadzenText>
+            </RadzenColumn>
+            <RadzenColumn Size="4" SizeMD="6" SizeLG="2">
+                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-mb-0">Chord</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1">@(Curve.Chord.ToString())</RadzenText>
+            </RadzenColumn>
+            <RadzenColumn Size="4" SizeMD="6" SizeLG="2">
+                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-mb-0">Radius</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1">@(Curve.Radius.ToString())</RadzenText>
+            </RadzenColumn>
+            <RadzenColumn Size="4" SizeMD="6" SizeLG="2">
+                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-mb-0">Tangent</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1">@(Curve.Tangent.ToString())</RadzenText>
+            </RadzenColumn>
+        </RadzenRow>
+        <BearingComponent Bearing="Curve.ChordBearing" Title="Chord Bearing" />
+        <BearingComponent Bearing="Curve.BearingToCenterPoint" Title="Bearing From Center Point" />
+    </MainContent>
+</ShapeComponent>
+
+@code {
+    [Parameter]
+    public Curve Curve { get; set; }
+}
