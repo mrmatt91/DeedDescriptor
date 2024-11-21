@@ -70,8 +70,7 @@ namespace DeedDescriptor.Objects
         public override string TranslateToDeedDescription()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append("Proceeding along a curve ");
-            stringBuilder.Append(DetermineCurveDirection(BearingToCenterPoint.GetDegrees(), ChordBearing.GetDegrees()));
+            stringBuilder.Append($"Proceeding along a curve extending to the {DetermineCurveDirection(BearingToCenterPoint.GetDegrees(), ChordBearing.GetDegrees())} ");
             stringBuilder.Append($"with a radius of {Radius.Format()} feet, having an arc length of {Arc.Format()} feet, with a central angle of {CentralAngle}, and having a chord bearing & distance of {ChordBearing}, {Chord.Format()} feet, to a point of tangency; ");
             return stringBuilder.ToString();
         }
