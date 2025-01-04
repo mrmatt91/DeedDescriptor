@@ -11,9 +11,9 @@
         <RadzenColumn Size="1">
             <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-on-secondary-lighter">@(Shape.Point)</RadzenText>
         </RadzenColumn>
-        <RadzenColumn Size="1">
+        @* <RadzenColumn Size="1">
             @ShapeType
-        </RadzenColumn>
+        </RadzenColumn> *@
         <RadzenColumn Size="10">
             <RadzenStack Gap="20px" AlignItems="AlignItems.Center" Orientation="Orientation.Horizontal">
                 @if (!IsEditing)

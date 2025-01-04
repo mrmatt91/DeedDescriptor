@@ -1,130 +1,389 @@
 ﻿@page "/"
 @using DeedDescriptor.Objects
 @using System.Globalization
-
 <RadzenFileInput @bind-Value=@bearingAndDistanceRawData TValue="byte[]" Style="width: 100%"
-                 Accept="text/plain"
-                 Change=@(args => OnChange(args, "FileInput"))
-                 InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})" />
+Accept="text/plain"
+Change=@(args => OnChange(args, "FileInput"))
+InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})" />
 
 <RadzenTabs TabPosition="TabPosition.Top" Class="w-100 my-0 mx-auto" RenderMode="TabRenderMode.Client">
-    <Tabs>
-        <RadzenTabsItem Text="Point Data">
-            <RadzenDataList Data="@shapes">
-                <Template Context="shape">
-                    <DeedDescriptor.Components.ShapeWrapperComponent Shape="shape" />
-                </Template>
-            </RadzenDataList>
-        </RadzenTabsItem>
-        <RadzenTabsItem Text="Deed Description">
-            <RadzenCard Style="height:100%">
-                @if (shapes != null && shapes.Any())
-                {
-                    <RadzenTextArea Rows="25" Style="width:100%;height:100%;word-wrap:normal;" Value=@string.Join("",shapes.Select(s => s.TranslateToDeedDescription())) />
-                }
-            </RadzenCard>
-        </RadzenTabsItem>
-    </Tabs>
+	<Tabs>
+		<RadzenTabsItem Text="Deed Data">
+			<RadzenRow Gap="1rem" class="rz-p-0 rz-p-lg-4">
+				<RadzenColumn Size="12" SizeMD="12">
+					<RadzenStack>
+						<RadzenFieldset Text="Header Paragraph">
+							<RadzenStack  Gap="1rem">
+								<RadzenRow AlignItems="AlignItems.Center">
+									<RadzenColumn Size="12" SizeMD="4">
+										<RadzenLabel Text="Name" Component="NameId" />
+									</RadzenColumn>
+									<RadzenColumn Size="12" SizeMD="8">
+										<RadzenTextBox @bind-Value="deedData.OwnerTaxID.Name" Style="width: 100%;"></RadzenTextBox>
+									</RadzenColumn>
+								</RadzenRow>
+								<RadzenRow AlignItems="AlignItems.Center">
+									<RadzenColumn Size="12" SizeMD="2">
+										<RadzenLabel Text=@($"Tax {(deedData.OwnerTaxID.IsTaxMap ? "Map #" : "Pin")}") Component="TaxPinId" />
+									</RadzenColumn>
+									<RadzenColumn Size="12" SizeMD="2">
+										<RadzenCheckBox @bind-Value=deedData.OwnerTaxID.IsTaxMap />
+										<RadzenLabel Text="Is Tax Map #?" />
+									</RadzenColumn>
+									<RadzenColumn Size="12" SizeMD="8">
+										<RadzenTextBox @bind-Value="deedData.OwnerTaxID.IDNumber" Style="width: 100%;"></RadzenTextBox>
+									</RadzenColumn>
+								</RadzenRow>
+								<RadzenRow AlignItems="AlignItems.Center">
+									<RadzenColumn Size="12" SizeMD="4">
+										<RadzenLabel Text="Area" Component="AreaId" />
+									</RadzenColumn>
+									<RadzenColumn Size="12" SizeMD="8">
+										<RadzenNumeric @bind-Value="deedData.Area" Style="width: 100%;"></RadzenNumeric>
+									</RadzenColumn>
+								</RadzenRow>
+							</RadzenStack>
+						</RadzenFieldset>
+					</RadzenStack>
+				</RadzenColumn>
+			</RadzenRow>
+			<RadzenRow Gap="1rem" class="rz-p-0 rz-p-lg-4">
+				<RadzenColumn Size="12" SizeMD="12">
+					<RadzenStack>
+						<RadzenFieldset Text="Initial Paragraph">
+							<RadzenStack Gap="1rem">
+								<RadzenRow AlignItems="AlignItems.Center">
+									<RadzenColumn Size="12" SizeMD="4">
+										<RadzenLabel Text="Road Name" Component="NameId" />
+									</RadzenColumn>
+									<RadzenColumn Size="12" SizeMD="8">
+										<RadzenTextBox @bind-Value="deedData.StreetName" Style="width: 100%;"></RadzenTextBox>
+									</RadzenColumn>
+								</RadzenRow>
+								<RadzenRow AlignItems="AlignItems.Center">
+									<RadzenColumn Size="12" SizeMD="4">
+										<RadzenLabel Text="Street Width" Component="StreetWidthId" />
+									</RadzenColumn>
+									<RadzenColumn Size="12" SizeMD="8">
+										<RadzenNumeric @bind-Value="deedData.StreetWidth" Style="width: 100%;"></RadzenNumeric>
+									</RadzenColumn>
+								</RadzenRow>
+								<RadzenRow AlignItems="AlignItems.Center">
+									<RadzenColumn Size="12" SizeMD="4">
+										<RadzenLabel Text="Township" Component="TownshipId" />
+									</RadzenColumn>
+									<RadzenColumn Size="12" SizeMD="8">
+										<RadzenTextBox @bind-Value="deedData.Township" Style="width: 100%;"></RadzenTextBox>
+									</RadzenColumn>
+								</RadzenRow>
+								<RadzenRow AlignItems="AlignItems.Center">
+									<RadzenColumn Size="12" SizeMD="4">
+										<RadzenLabel Text="County" Component="CountyId" />
+									</RadzenColumn>
+									<RadzenColumn Size="12" SizeMD="8">
+										<RadzenTextBox @bind-Value="deedData.County" Style="width: 100%;"></RadzenTextBox>
+									</RadzenColumn>
+								</RadzenRow>
+								<RadzenRow AlignItems="AlignItems.Center">
+									<RadzenColumn Size="12" SizeMD="4">
+										<RadzenLabel Text="State" Component="StateId" />
+									</RadzenColumn>
+									<RadzenColumn Size="12" SizeMD="8">
+										<RadzenTextBox @bind-Value="deedData.County" Style="width: 100%;"></RadzenTextBox>
+									</RadzenColumn>
+								</RadzenRow>
+								<RadzenRow AlignItems="AlignItems.Center">
+									<RadzenColumn Size="12" SizeMD="4">
+										<RadzenLabel Text="Date" Component="DateId" />
+									</RadzenColumn>
+									<RadzenColumn Size="12" SizeMD="8">
+										<RadzenDatePicker @bind-Value="deedData.Date" Style="width: 100%;"></RadzenDatePicker>
+									</RadzenColumn>
+								</RadzenRow>
+								<RadzenRow AlignItems="AlignItems.Center">
+									<RadzenColumn Size="12" SizeMD="4">
+										<RadzenLabel Text="Reference Plan" Component="RefPlanId" />
+									</RadzenColumn>
+									<RadzenColumn Size="12" SizeMD="8">
+										<RadzenTextArea Rows="3" @bind-Value="deedData.ReferencePlan" Style="width:100%;height:100%;word-wrap:normal;"></RadzenTextArea>
+									</RadzenColumn>
+								</RadzenRow>
+							</RadzenStack>
+						</RadzenFieldset>
+					</RadzenStack>
+				</RadzenColumn>
+			</RadzenRow>
+			<RadzenRow Gap="1rem" class="rz-p-0 rz-p-lg-4">
+				<RadzenColumn Size="12" SizeMD="12">
+					<RadzenStack>
+						<RadzenFieldset Text="Adjoining Property Owner(s)">
+							<RadzenStack Gap="1rem">
+								<RadzenRow AlignItems="AlignItems.Center">
+									<RadzenDataGrid @ref="adjoingPropertyOwnersGrid" Data="deedData.AdjoiningPropertyOwners">
+										<HeaderTemplate>
+											<RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Add New Order" Click="@InsertRow" Disabled="@(isEditing)" />
+										</HeaderTemplate>
+										<Columns>
+											<RadzenDataGridColumn Context="ownerTaxIdRow" Property="Value.Name" Title="Owner Name">
+												<Template Context="row">
+													<RadzenText Text=@row.Value.Name />
+												</Template>
+												<EditTemplate Context="row">
+													<RadzenTextBox @bind-value=row.Value.Name />
+												</EditTemplate>
+											</RadzenDataGridColumn>
+											<RadzenDataGridColumn Context="ownerTaxIdRow" Property="Value.IsTaxMap" Title="Is Tax Map #?">
+												<Template Context="row">
+													<RadzenText Text=@(row.Value.IsTaxMap ? "Yes" : "No") />
+												</Template>
+												<EditTemplate Context="row">
+													<RadzenCheckBox @bind-value=row.Value.IsTaxMap />
+												</EditTemplate>
+											</RadzenDataGridColumn>
+											<RadzenDataGridColumn Context="ownerTaxIdRow" Property="Value.IDNumber" Title="Tax PIN / Map #">
+												<Template Context="row">
+													<RadzenText Text=@row.Value.IDNumber />
+												</Template>
+												<EditTemplate Context="row">
+													<RadzenTextBox @bind-value=row.Value.IDNumber />
+												</EditTemplate>
+											</RadzenDataGridColumn>
+											<RadzenDataGridColumn Context="ownerTaxIdRow" Filterable="false" Sortable="false" TextAlign="TextAlign.Right" Frozen="true" FrozenPosition="FrozenColumnPosition.Right">
+												<Template Context="ownerTaxIdRow">
+													<RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@(args => EditRow(ownerTaxIdRow))" @onclick:stopPropagation="true" />
+													<RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" class="rz-my-1 rz-ms-1" Click="@(args => DeleteRow(ownerTaxIdRow))" aria-label="Delete" />
+												</Template>
+												<EditTemplate Context="ownerTaxIdRow">
+													<RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@((args) => SaveRow(ownerTaxIdRow))" aria-label="Save" />
+													<RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium" class="rz-my-1 rz-ms-1" Click="@((args) => CancelEdit(ownerTaxIdRow))" aria-label="Cancel" />
+												</EditTemplate>
+											</RadzenDataGridColumn>
+										</Columns>
+									</RadzenDataGrid>
+								</RadzenRow>
+							</RadzenStack>
+						</RadzenFieldset>
+					</RadzenStack>
+				</RadzenColumn>
+			</RadzenRow>
+		</RadzenTabsItem>
+		<RadzenTabsItem Text="Point Data">
+			<RadzenStack Orientation="Orientation.Vertical">
+				<RadzenDataList Data="@shapes">
+					<Template Context="shape">
+						<DeedDescriptor.Components.ShapeWrapperComponent Shape="shape" />
+					</Template>
+				</RadzenDataList>
+			</RadzenStack>
+		</RadzenTabsItem>
+		<RadzenTabsItem Text="Deed Description">
+			<RadzenCard Style="height:100%">
+				@if (shapes != null && shapes.Any())
+				{
+					<RadzenTextArea Rows="25" Style="width:100%;height:100%;word-wrap:normal;" Value=@string.Join("",shapes.Select(s => s.TranslateToDeedDescription())) />
+				}
+			</RadzenCard>
+		</RadzenTabsItem>
+	</Tabs>
 </RadzenTabs>
 
 
 @code {
-    private byte[] bearingAndDistanceRawData = null;
-    private List<Shape> shapes { get; set; }
-    
-    void OnChange(byte[] value, string name)
-    {
-        if (value == null)
-        {
-            shapes = null;
-        }
-        else
-        {
-            var base64StringData = System.Text.Encoding.UTF8.GetString(bearingAndDistanceRawData, 0, bearingAndDistanceRawData.Length);
-            var decodedByteArray = Convert.FromBase64String(base64StringData.Split(',')[1]);
-            var lines = new List<string>();
+	private byte[] bearingAndDistanceRawData = null;
+	private List<Shape> shapes { get; set; }
+	private DeedData deedData { get; set; }
+	private RadzenDataGrid<KeyValuePair<Guid, OwnerTaxID>> adjoingPropertyOwnersGrid { get; set; }
+	private bool isEditing { get; set; }
+	private bool isNewRow { get; set; }
+	private OwnerTaxID originalOwnerTaxID { get; set; }
 
-            shapes = new List<Shape>();
-            using (StreamReader reader = new StreamReader(new MemoryStream(decodedByteArray)))
-            {
-                var line = string.Empty;
-                bool startFound = false;
+	protected override async Task OnInitializedAsync()
+	{
+		deedData = new DeedData();
+	}
 
-                while ((line = reader.ReadLine()) != null)
-                {
-                    if (line.Trim() == "Start")
-                    {
-                        startFound = true;
-                        continue;
-                    }
+	void OnChange(byte[] value, string name)
+	{
+		if (value == null)
+		{
+			shapes = null;
+			deedData = null;
+		}
+		else
+		{
+			var base64StringData = System.Text.Encoding.UTF8.GetString(bearingAndDistanceRawData, 0, bearingAndDistanceRawData.Length);
+			var decodedByteArray = Convert.FromBase64String(base64StringData.Split(',')[1]);
+			var lines = new List<string>();
+			deedData = new DeedData();
+			shapes = new List<Shape>();
+			using (StreamReader reader = new StreamReader(new MemoryStream(decodedByteArray)))
+			{
+				var line = string.Empty;
+				bool startFound = false;
 
-                    // Add lines to the list if "Start" has been found or if "Start" is not present
-                    if (startFound)
-                    {
-                        lines.Add(line);
-                    }
-                }
-            }
+				while ((line = reader.ReadLine()) != null)
+				{
+					if (line.Trim() == "Start")
+					{
+						startFound = true;
+						continue;
+					}
 
-            for(int i = 0; i < lines.Count; i++)
-            {
-                var line = lines[i];
-                if (line != null)
-                {
-                    var header = GetHeader(line);
-                    if (!shapes.Any() || shapes.FirstOrDefault().Point != header.Item1) //Item1 represents a point
-                    {
-                        line = lines[++i];
-                        if (line.TrimStart().StartsWith("Arc"))
-                        {
-                            shapes.Add(new Curve(header.Item1, header.Item2, line, lines[++i], lines[++i], lines[++i]));
-                        }
-                        else
-                        {
-                            shapes.Add(new Line(header.Item1, header.Item2, line));
-                        }
-                    }
-                }
-            }
+					// Add lines to the list if "Start" has been found or if "Start" is not present
+					if (startFound)
+					{
+						lines.Add(line);
+					}
+				}
+			}
 
-        }
-    }
+			for (int i = 0; i < lines.Count; i++)
+			{
+				var line = lines[i];
+				if (line != null)
+				{
+					var header = GetHeader(line);
+					if (!shapes.Any() || shapes.FirstOrDefault().Point != header.Item1) //Item1 represents a point
+					{
+						line = lines[++i];
+						if (line.TrimStart().StartsWith("Arc"))
+						{
+							shapes.Add(new Curve(header.Item1, header.Item2, line, lines[++i], lines[++i], lines[++i]));
+						}
+						else
+						{
+							shapes.Add(new Line(header.Item1, header.Item2, line));
+						}
+					}
+				}
+			}
 
-    private (string, string) GetHeader(string headerRow)
-    {
-        // Split the line into tokens, removing empty entries
-        string[] tokens = headerRow.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+		}
+	}
 
-        // Ensure there are enough tokens to process
-        if (tokens.Length >= 3)
-        {
-            int numTokens = tokens.Length;
+	private (string, string) GetHeader(string headerRow)
+	{
+		// Split the line into tokens, removing empty entries
+		string[] tokens = headerRow.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
-            // Attempt to parse the last two tokens as doubles (GPS coordinates)
-            bool isCoordinate1Numeric = double.TryParse(tokens[numTokens - 2], NumberStyles.Any, CultureInfo.InvariantCulture, out _);
-            bool isCoordinate2Numeric = double.TryParse(tokens[numTokens - 1], NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+		// Ensure there are enough tokens to process
+		if (tokens.Length >= 3)
+		{
+			int numTokens = tokens.Length;
 
-            int numCoordinates = (isCoordinate1Numeric && isCoordinate2Numeric) ? 2 : 0;
+			// Attempt to parse the last two tokens as doubles (GPS coordinates)
+			bool isCoordinate1Numeric = double.TryParse(tokens[numTokens - 2], NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+			bool isCoordinate2Numeric = double.TryParse(tokens[numTokens - 1], NumberStyles.Any, CultureInfo.InvariantCulture, out _);
 
-            // Calculate the number of description tokens
-            int numDescriptionTokens = numTokens - numCoordinates - 1; // Exclude point number and coordinates
+			int numCoordinates = (isCoordinate1Numeric && isCoordinate2Numeric) ? 2 : 0;
 
-            // Get the point number
-            string pointNumber = tokens[0];
+			// Calculate the number of description tokens
+			int numDescriptionTokens = numTokens - numCoordinates - 1; // Exclude point number and coordinates
 
-            // Get the description tokens
-            string[] descriptionTokens = tokens.Skip(1).Take(numDescriptionTokens).ToArray();
+			// Get the point number
+			string pointNumber = tokens[0];
 
-            // Join the description tokens into a single string
-            string description = string.Join(" ", descriptionTokens);
+			// Get the description tokens
+			string[] descriptionTokens = tokens.Skip(1).Take(numDescriptionTokens).ToArray();
 
-            return (pointNumber, description);
+			// Join the description tokens into a single string
+			string description = string.Join(" ", descriptionTokens);
 
-        }
-        else
-        {
-            return ("0", "");
-        }
-    }
+			return (pointNumber, description);
+
+		}
+		else
+		{
+			return ("0", "");
+		}
+	}
+
+	// Keep track of the row that is currently being edited
+	KeyValuePair<Guid, OwnerTaxID>? currentlyEditingRow;
+
+	async Task EditRow(KeyValuePair<Guid, OwnerTaxID> keyValuePair)
+	{
+		// If something is currently being edited and it's a different row,
+		// first cancel that edit.
+		if (isEditing && currentlyEditingRow.HasValue &&
+			!Equals(currentlyEditingRow.Value.Key, keyValuePair.Key))
+		{
+			await CancelEdit(currentlyEditingRow.Value);
+		}
+
+		// Now set the newly selected row as the row being edited.
+		currentlyEditingRow = keyValuePair;
+		isEditing = true;
+		isNewRow = false;
+
+		// Copy the data for rollback purposes.
+		originalOwnerTaxID = new OwnerTaxID();
+		originalOwnerTaxID.CopyData(keyValuePair.Value);
+
+		// Put grid into edit mode for this row.
+		await adjoingPropertyOwnersGrid.EditRow(keyValuePair);
+	}
+
+	async Task InsertRow()
+	{
+		// If something is currently being edited, cancel that edit first.
+		if (isEditing && currentlyEditingRow.HasValue)
+		{
+			await CancelEdit(currentlyEditingRow.Value);
+		}
+
+		// Create a new row (OwnerTaxID), generate a Guid, and add to the dictionary.
+		var ownerNameTaxIDEntry = new OwnerTaxID();
+		var newGuid = Guid.NewGuid();
+		deedData.AdjoiningPropertyOwners.Add(newGuid, ownerNameTaxIDEntry);
+
+		// Update "currentlyEditingRow" to the newly inserted row.
+		currentlyEditingRow = new KeyValuePair<Guid, OwnerTaxID>(newGuid, ownerNameTaxIDEntry);
+		isEditing = true;
+		isNewRow = true;
+
+		// Instruct the grid to edit/insert this new row.
+		await adjoingPropertyOwnersGrid.InsertRow(currentlyEditingRow.Value);
+	}
+
+	async Task CancelEdit(KeyValuePair<Guid, OwnerTaxID> keyValuePair)
+	{
+		// If this was a brand-new row, remove it from the dictionary.
+		if (isNewRow)
+		{
+			deedData.AdjoiningPropertyOwners.Remove(keyValuePair.Key);
+		}
+		else
+		{
+			// Otherwise, roll back to original data and refresh the grid.
+			deedData.AdjoiningPropertyOwners[keyValuePair.Key].CopyData(originalOwnerTaxID);
+			await adjoingPropertyOwnersGrid.Reload();
+		}
+
+		// Exit edit mode on the grid and reset tracking variables.
+		adjoingPropertyOwnersGrid.CancelEditRow(keyValuePair);
+		originalOwnerTaxID = new OwnerTaxID();
+		currentlyEditingRow = null;
+		isEditing = false;
+		isNewRow = false;
+	}
+
+	async Task DeleteRow(KeyValuePair<Guid, OwnerTaxID> keyValuePair)
+	{
+		deedData.AdjoiningPropertyOwners.Remove(keyValuePair.Key);
+		await adjoingPropertyOwnersGrid.Reload();
+	}
+
+	void SaveRow(KeyValuePair<Guid, OwnerTaxID> keyValuePair)
+	{
+		// Commit changes on the grid side.
+		adjoingPropertyOwnersGrid.UpdateRow(keyValuePair);
+
+		// Reset tracking variables.
+		currentlyEditingRow = null;
+		isEditing = false;
+		isNewRow = false;
+	}
+
 
 }
