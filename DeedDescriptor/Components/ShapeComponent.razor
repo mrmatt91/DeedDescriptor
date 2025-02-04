@@ -1,44 +1,48 @@
 ﻿@using DeedDescriptor.Objects
 
 <style>
-    .rz-card .rz-variant-flat:hover{
-        cursor: pointer !important;
+    .rz-card .rz-variant-flat:hover {
+    cursor: pointer !important;
     }
 </style>
 
-<RadzenCard>
-    <RadzenRow Gap="0">
-        <RadzenColumn Size="1">
-            <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-on-secondary-lighter">@(Shape.Point)</RadzenText>
-        </RadzenColumn>
-        @* <RadzenColumn Size="1">
-            @ShapeType
-        </RadzenColumn> *@
-        <RadzenColumn Size="10">
-            <RadzenStack Gap="20px" AlignItems="AlignItems.Center" Orientation="Orientation.Horizontal">
-                @if (!IsEditing)
-                {
-                    <RadzenCard Variant="Variant.Flat">
-                        <RadzenIcon Icon="edit" IconColor="@Colors.Info" onclick="@(() => SetIsEditing(true))" />
-                    </RadzenCard>
-                    <RadzenText TextStyle="TextStyle.Body2">@(Shape.Description)</RadzenText>
-                }
-                else
-                {
-                    <RadzenCard Variant="Variant.Flat">
-                        <RadzenIcon Icon="check" IconColor="@Colors.Success" onclick="@(() => OnEditClose(false))" />
-                    </RadzenCard>
-                    <RadzenCard Variant="Variant.Flat">
-                        <RadzenIcon Icon="cancel" IconColor="@Colors.Danger" onclick="@(() => OnEditClose(true))" />
-                    </RadzenCard>
-                    <RadzenTextArea Style="width:100%; display:block; word-wrap: break-word" @bind-Value=@Shape.Description />
-                }
-
-            </RadzenStack>
-        </RadzenColumn>
-    </RadzenRow>
-    @MainContent
-</RadzenCard>
+<RadzenFieldset Text=@($"Point {Shape.Point} - {Shape.Name}") Style="box-shadow: var(--rz-card-shadow);">
+    <RadzenStack Gap="1rem">
+        <RadzenRow AlignItems="AlignItems.Center">
+            <RadzenColumn Size="12" SizeMD="12">
+                <RadzenStack Orientation="Orientation.Horizontal">
+                    <RadzenText Text="Description: " />
+                    @if (!IsEditing)
+                    {
+                        <RadzenCard Variant="Variant.Flat">
+                            <RadzenIcon Icon="edit" IconColor="@Colors.Info" onclick="@(() => SetIsEditing(true))" />
+                        </RadzenCard>
+                        <RadzenText TextStyle="TextStyle.Body2">@(Shape.Description)</RadzenText>
+                    }
+                    else
+                    {
+                        <RadzenCard Variant="Variant.Flat">
+                            <RadzenIcon Icon="check" IconColor="@Colors.Success" onclick="@(() => OnEditClose(false))" />
+                        </RadzenCard>
+                        <RadzenCard Variant="Variant.Flat">
+                            <RadzenIcon Icon="cancel" IconColor="@Colors.Danger" onclick="@(() => OnEditClose(true))" />
+                        </RadzenCard>
+                        <RadzenTextArea Style="width:100%; display:block; word-wrap: break-word" @bind-Value=@Shape.Description />
+                    }
+                </RadzenStack>
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow AlignItems="AlignItems.Center">
+            <RadzenColumn Size="4" SizeMD="4">
+                <RadzenText Text="Property Owner: " />
+            </RadzenColumn>
+            <RadzenColumn Size="8" SizeMD="8">
+                <RadzenDropDown Data="PropertyOwners" TValue="Guid" TextProperty="Value.Name" ValueProperty="Key" @bind-Value=Shape.OwnerID />
+            </RadzenColumn>
+        </RadzenRow>
+        @MainContent
+    </RadzenStack>
+</RadzenFieldset>
 
 @code {
     [Parameter]
@@ -48,9 +52,19 @@
     [Parameter]
     public RenderFragment ShapeType { get; set; }
 
+    [CascadingParameter(Name = "PropertyOwners")]
+    public List<KeyValuePair<Guid, OwnerTaxID>> PropertyOwners { get; set; }
+
     public bool IsEditing { get; set; }
     public string oldDescription { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (Shape != null && Shape.OwnerID == Guid.Empty)
+        {
+            Shape.OwnerID = PropertyOwners.FirstOrDefault().Key;
+        }
+    }
 
     public void SetIsEditing(bool isEditing)
     {

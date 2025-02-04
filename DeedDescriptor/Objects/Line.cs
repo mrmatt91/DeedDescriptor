@@ -11,14 +11,16 @@ namespace DeedDescriptor.Objects
         public Bearing Bearing { get; set; }
         public bool PreceedsCurve { get; set; }
 
-        public Line() { }
+        public Line() { Name = "Line"; }
         public Line(string point, string description)
         {
+            Name = "Line";
             Point = point;
             Description = description;
         }
         public Line(string point, string firstValue, char primaryDirection, int degrees, int minutes, int seconds, char direction, decimal distance, string description)
         {
+            Name = "Line";
             Point = point;
             FirstValue = firstValue;
             Bearing = new Bearing(primaryDirection, degrees, minutes, seconds, direction);
@@ -27,6 +29,7 @@ namespace DeedDescriptor.Objects
         }
         public Line(string point, string description, string lineData)
         {
+            Name = "Line";
             Point = point;
             Description = description;
 			PreceedsCurve = lineData.Contains("To Cntr. Pt.");

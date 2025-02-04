@@ -16,11 +16,14 @@ namespace DeedDescriptor.Objects
         public Bearing BearingToCenterPoint { get; set; }
 
         public decimal? Tangent { get; set; }
-
-        public Curve() { }
+        public Curve() 
+        {
+            Name = "Curve";
+        }
 
         public Curve(string point, string description)
         {
+            Name = "Curve";
             Point = point;
             Description = description;
         }
@@ -28,6 +31,7 @@ namespace DeedDescriptor.Objects
         public Curve(string point, string description, string curveLine1, string curveLine2, string curveLine3, string curveLine4)
             : this(point, description)
         {
+            Name = "Curve";
             var curveLine1Parts = curveLine1.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
             Arc = decimal.Parse(curveLine1Parts[1].Replace("Arc", ""));
             CentralAngle = curveLine1Parts[4];
@@ -45,6 +49,7 @@ namespace DeedDescriptor.Objects
 
         public Curve(string point, string description, string? arc, string? centralAngle, string? chord, string chordBearing, string? radius, string bearingToCenterPoint, string? tangent)
         {
+            Name = "Curve";
             Point = point;
             Description = description;
             Arc = decimal.Parse(arc.Replace("Arc", ""));
