@@ -188,7 +188,8 @@ InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file
         <RadzenTabsItem Text="Deed Description">
             <RadzenCard Style="height:100%">
                 <RadzenButton Text="Generate Description" Disabled=@(shapes == null || !shapes.Any()) Click="@GenerateDescription" />
-                <RadzenHtmlEditor Rows="25" Style="width:100%;height:100%;word-wrap:normal;" @bind-Value=@DeedDescription />
+                @* <RadzenHtmlEditor Rows="25" Style="width:100%;height:100%;word-wrap:normal;" @bind-Value=@DeedDescription /> *@
+                <RadzenTextArea Rows="25" Style="width:100%;height:100%;word-wrap:normal;" @bind-Value=@DeedDescription />
             </RadzenCard>
         </RadzenTabsItem>
     </Tabs>
@@ -219,134 +220,134 @@ InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file
 
     private void GenerateDescription()
     {
-        //DeedDescription = string.Join("", shapes.Select(s => s.TranslateToDeedDescription()));
+        DeedDescription = string.Join("", shapes.Select(s => s.TranslateToDeedDescription()));
 
-        var sb = new StringBuilder();
+//         var sb = new StringBuilder();
 
-        sb.AppendLine(
-            @"<html>
+//         sb.AppendLine(
+//             @"<html>
 
-<head>
-    <meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"">
-    <meta name=""Generator"" content=""Microsoft Word 15 (filtered)"">
-    <style>
-    <!--
-     /* Font Definitions */
-     @font-face
-        {font-family:""Cambria Math"";
-        panose-1:2 4 5 3 5 4 6 3 2 4;}
-     @font-face
-        {font-family:Georgia;
-        panose-1:2 4 5 2 5 4 5 2 3 3;}
-     @font-face
-        {font-family:""Open Sans"";
-        panose-1:2 11 6 6 3 5 4 2 2 4;}
-     /* Style Definitions */
-     p.MsoNormal, li.MsoNormal, div.MsoNormal
-        {margin-top:0in;
-        margin-right:0in;
-        margin-bottom:0in;
-        margin-left:-.05pt;
-        text-indent:-.05pt;
-        font-size:10.0pt;
-        font-family:""Open Sans"",sans-serif;
-        position:relative;
-        top:.5pt;}
-     p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
-        {margin-top:0in;
-        margin-right:0in;
-        margin-bottom:0in;
-        margin-left:.5in;
-        text-indent:-.05pt;
-        font-size:10.0pt;
-        font-family:""Open Sans"",sans-serif;
-        position:relative;
-        top:.5pt;}
-     p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
-        {margin-top:0in;
-        margin-right:0in;
-        margin-bottom:0in;
-        margin-left:.5in;
-        text-indent:-.05pt;
-        font-size:10.0pt;
-        font-family:""Open Sans"",sans-serif;
-        position:relative;
-        top:.5pt;}
-     p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
-        {margin-top:0in;
-        margin-right:0in;
-        margin-bottom:0in;
-        margin-left:.5in;
-        text-indent:-.05pt;
-        font-size:10.0pt;
-        font-family:""Open Sans"",sans-serif;
-        position:relative;
-        top:.5pt;}
-     p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
-        {margin-top:0in;
-        margin-right:0in;
-        margin-bottom:0in;
-        margin-left:.5in;
-        text-indent:-.05pt;
-        font-size:10.0pt;
-        font-family:""Open Sans"",sans-serif;
-        position:relative;
-        top:.5pt;}
-     .MsoChpDefault
-        {font-size:10.0pt;
-        font-family:""Open Sans"",sans-serif;}
-     .MsoPapDefault
-        {text-indent:-.05pt;}
-     /* Page Definitions */
-     @page WordSection1
-        {size:8.5in 11.0in;
-        margin:1.0in 1.25in 1.0in 1.25in;}
-     div.WordSection1
-        {page:WordSection1;}
-     /* List Definitions */
-     ol
-        {margin-bottom:0in;}
-     ul
-        {margin-bottom:0in;}
-    -->
-    </style>
+// <head>
+//     <meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"">
+//     <meta name=""Generator"" content=""Microsoft Word 15 (filtered)"">
+//     <style>
+//     <!--
+//      /* Font Definitions */
+//      @font-face
+//         {font-family:""Cambria Math"";
+//         panose-1:2 4 5 3 5 4 6 3 2 4;}
+//      @font-face
+//         {font-family:Georgia;
+//         panose-1:2 4 5 2 5 4 5 2 3 3;}
+//      @font-face
+//         {font-family:""Open Sans"";
+//         panose-1:2 11 6 6 3 5 4 2 2 4;}
+//      /* Style Definitions */
+//      p.MsoNormal, li.MsoNormal, div.MsoNormal
+//         {margin-top:0in;
+//         margin-right:0in;
+//         margin-bottom:0in;
+//         margin-left:-.05pt;
+//         text-indent:-.05pt;
+//         font-size:10.0pt;
+//         font-family:""Open Sans"",sans-serif;
+//         position:relative;
+//         top:.5pt;}
+//      p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+//         {margin-top:0in;
+//         margin-right:0in;
+//         margin-bottom:0in;
+//         margin-left:.5in;
+//         text-indent:-.05pt;
+//         font-size:10.0pt;
+//         font-family:""Open Sans"",sans-serif;
+//         position:relative;
+//         top:.5pt;}
+//      p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
+//         {margin-top:0in;
+//         margin-right:0in;
+//         margin-bottom:0in;
+//         margin-left:.5in;
+//         text-indent:-.05pt;
+//         font-size:10.0pt;
+//         font-family:""Open Sans"",sans-serif;
+//         position:relative;
+//         top:.5pt;}
+//      p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
+//         {margin-top:0in;
+//         margin-right:0in;
+//         margin-bottom:0in;
+//         margin-left:.5in;
+//         text-indent:-.05pt;
+//         font-size:10.0pt;
+//         font-family:""Open Sans"",sans-serif;
+//         position:relative;
+//         top:.5pt;}
+//      p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
+//         {margin-top:0in;
+//         margin-right:0in;
+//         margin-bottom:0in;
+//         margin-left:.5in;
+//         text-indent:-.05pt;
+//         font-size:10.0pt;
+//         font-family:""Open Sans"",sans-serif;
+//         position:relative;
+//         top:.5pt;}
+//      .MsoChpDefault
+//         {font-size:10.0pt;
+//         font-family:""Open Sans"",sans-serif;}
+//      .MsoPapDefault
+//         {text-indent:-.05pt;}
+//      /* Page Definitions */
+//      @page WordSection1
+//         {size:8.5in 11.0in;
+//         margin:1.0in 1.25in 1.0in 1.25in;}
+//      div.WordSection1
+//         {page:WordSection1;}
+//      /* List Definitions */
+//      ol
+//         {margin-bottom:0in;}
+//      ul
+//         {margin-bottom:0in;}
+//     -->
+//     </style>
 
-</head>"
-);
+// </head>"
+// );
 
-        sb.AppendLine("""<body lang="EN-US" style='word-wrap:break-word'>""");
-        sb.AppendLine("""<div class="WordSection1">""");
+//         sb.AppendLine("""<body lang="EN-US" style='word-wrap:break-word'>""");
+//         sb.AppendLine("""<div class="WordSection1">""");
 
-        sb.AppendLine(
-        @"<p class=""MsoNormal"" align=""center"" style='margin-left:0in;text-align:center;text-indent:-.1pt'>
-            <a name=""_Hlk134388447"">
-                <b>
-                    <span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>
-                         DEED  DESCRIPTION
-                    </span>
-                </b>
-            </a>
-        </p>"
-        );
-        sb.AppendLine(
-           $@"<p class=""MsoNormal"" align=""center"" style='margin-left:0in;text-align:center;text-indent:-.1pt'>
-                <b>
-                    <span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>
-                {deedData.OwnerTaxID.Name}  
-                    </span>
-                </b>
-            </p>"
-        );
-        sb.AppendLine($@"<p class=""MsoNormal"" align=""center"" style='margin-left:0in;text-align:center;text-indent:-.1pt'><b><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>TAX {(deedData.OwnerTaxID.IsTaxMap ? "MAP #" : "PIN")} {deedData.OwnerTaxID.IDNumber} ({deedData.Area} Acres)</span></b></p>");
+//         sb.AppendLine(
+//         @"<p class=""MsoNormal"" align=""center"" style='margin-left:0in;text-align:center;text-indent:-.1pt'>
+//             <a name=""_Hlk134388447"">
+//                 <b>
+//                     <span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>
+//                          DEED  DESCRIPTION
+//                     </span>
+//                 </b>
+//             </a>
+//         </p>"
+//         );
+//         sb.AppendLine(
+//            $@"<p class=""MsoNormal"" align=""center"" style='margin-left:0in;text-align:center;text-indent:-.1pt'>
+//                 <b>
+//                     <span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>
+//                 {deedData.OwnerTaxID.Name}  
+//                     </span>
+//                 </b>
+//             </p>"
+//         );
+//         sb.AppendLine($@"<p class=""MsoNormal"" align=""center"" style='margin-left:0in;text-align:center;text-indent:-.1pt'><b><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>TAX {(deedData.OwnerTaxID.IsTaxMap ? "MAP #" : "PIN")} {deedData.OwnerTaxID.IDNumber} ({deedData.Area} Acres)</span></b></p>");
 
-        sb.AppendLine(@"<p class=MsoNormal align=center style='margin-left:0in;text-align:center;text-indent:-.1pt'><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>&nbsp;</span></p><p class=MsoNormal align=center style='margin-left:0in;text-align:center;text-indent:-.1pt'><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>&nbsp;</span></p>");
-        sb.AppendLine(@"<p class=MsoNormal align=center style='margin-left:0in;text-align:center;text-indent:-.1pt'><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>&nbsp;</span></p>");
-        sb.AppendLine(@"<p class=MsoNormal align=center style='margin-left:0in;text-align:center;text-indent:-.1pt'><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>&nbsp;</span></p>");
-        sb.AppendLine("</div>");
-        sb.AppendLine("</body>");
-        sb.AppendLine("</html>");
+//         sb.AppendLine(@"<p class=MsoNormal align=center style='margin-left:0in;text-align:center;text-indent:-.1pt'><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>&nbsp;</span></p><p class=MsoNormal align=center style='margin-left:0in;text-align:center;text-indent:-.1pt'><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>&nbsp;</span></p>");
+//         sb.AppendLine(@"<p class=MsoNormal align=center style='margin-left:0in;text-align:center;text-indent:-.1pt'><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>&nbsp;</span></p>");
+//         sb.AppendLine(@"<p class=MsoNormal align=center style='margin-left:0in;text-align:center;text-indent:-.1pt'><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>&nbsp;</span></p>");
+//         sb.AppendLine("</div>");
+//         sb.AppendLine("</body>");
+//         sb.AppendLine("</html>");
         
-        DeedDescription = sb.ToString();
+//         DeedDescription = sb.ToString();
     }
 
     void OnChange(byte[] value, string name)
@@ -412,8 +413,15 @@ InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file
         // Split the line into tokens, removing empty entries
         string[] tokens = headerRow.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
-        // Ensure there are enough tokens to process
-        if (tokens.Length >= 3)
+        // If there are exactly 2 tokens, ignore GPS coordinate calculations.
+        if (tokens.Length == 2)
+        {
+            string pointNumber = tokens[0];
+            string description = tokens[1];
+            return (pointNumber, description);
+        }
+        // If there are 3 or more tokens, attempt to parse the last two tokens as GPS coordinates.
+        else if (tokens.Length >= 3)
         {
             int numTokens = tokens.Length;
 
@@ -423,21 +431,19 @@ InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file
 
             int numCoordinates = (isCoordinate1Numeric && isCoordinate2Numeric) ? 2 : 0;
 
-            // Calculate the number of description tokens
-            int numDescriptionTokens = numTokens - numCoordinates - 1; // Exclude point number and coordinates
+            // Calculate the number of description tokens (exclude the point number and any GPS coordinate tokens)
+            int numDescriptionTokens = numTokens - numCoordinates - 1;
 
             // Get the point number
             string pointNumber = tokens[0];
 
-            // Get the description tokens
+            // Get the description tokens and join them into a single string
             string[] descriptionTokens = tokens.Skip(1).Take(numDescriptionTokens).ToArray();
-
-            // Join the description tokens into a single string
             string description = string.Join(" ", descriptionTokens);
 
             return (pointNumber, description);
-
         }
+        // If there are fewer than 2 tokens, return a default value.
         else
         {
             return ("0", "");
