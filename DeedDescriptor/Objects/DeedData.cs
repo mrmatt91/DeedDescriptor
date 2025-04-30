@@ -30,7 +30,7 @@ namespace DeedDescriptor.Objects
         public DeedData()
         {
 
-            OwnerTaxID = new OwnerTaxID();
+            OwnerTaxID = new OwnerTaxID() { Name="Chris Bloppes"};
             AdjoiningPropertyOwners = new Dictionary<Guid, OwnerTaxID>();
         }
     }
