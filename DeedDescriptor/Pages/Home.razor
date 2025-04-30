@@ -213,7 +213,7 @@ InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file
             <RadzenCard Style="height:100%">
                 <RadzenButton Text="Generate Description" Disabled=@(shapes == null || !shapes.Any()) Click="@GenerateDescription" />
                 <RadzenHtmlEditor Rows="25" Style="width:100%;height:100%;word-wrap:normal;" @bind-Value=@DeedDescription />
-                @* <RadzenTextArea Rows="25" Style="width:100%;height:100%;word-wrap:normal;" @bind-Value=@DeedDescription /> *@
+                <RadzenTextArea Rows="25" Style="width:100%;height:100%;word-wrap:normal;" @bind-Value=@DeedDescription2 />
             </RadzenCard>
         </RadzenTabsItem>
     </Tabs>
@@ -229,6 +229,7 @@ InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file
     private bool isNewRow { get; set; }
     private OwnerTaxID originalOwnerTaxID { get; set; }
     private string DeedDescription { get; set; } = "";
+    private string DeedDescription2 { get; set; } = "";
     private Guid mainOwnerKey { get; set; }
     private List<KeyValuePair<Guid, OwnerTaxID>> propertyOwnersList;
     private List<string> Directions = new List<string>() { "North","North-West", "North-East", "South", "South-West", "South-East", "East", "West" };
@@ -248,7 +249,7 @@ InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file
     public void GenerateDescription()
     {
         string x = HtmlHelper.Head;
-        // DeedDescription = string.Join("", shapes.Select(s => s.TranslateToDeedDescription()));
+        DeedDescription2 = string.Join("", shapes.Select(s => s.TranslateToDeedDescription()));
 
         var sb = new StringBuilder();
 

@@ -91,7 +91,7 @@ namespace DeedDescriptor.Objects
 
                 stringBuilder.Append($"with a distance of {distanceString1} and {(distanceValues[1] == "00" ? "no" : distanceString2)} one-hundredths ({distanceValues[0]}.{(distanceValue2Int == 0 ? "00" : distanceValue2)}) feet ");
             }
-            var isFirstLetterVowelOrY = HelperCollections.VowelList.Contains(Description.First());
+            var isFirstLetterVowelOrY = HelperCollections.VowelList.Contains(Description.ToLower().First());
             stringBuilder.Append($"to {(isFirstLetterVowelOrY ? "an" : "a")} {Description}; ");
 
             return stringBuilder.ToString();
