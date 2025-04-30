@@ -61,7 +61,7 @@ namespace DeedDescriptor.Objects
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($"a bearing{(PreceedsCurve ? ", that is radial to the curve," : "")} of {Bearing.TranslateToDeedDescription()}");
 
-            var distanceValues = Distance.ToString().Split('.');
+            var distanceValues = Math.Round(Distance, 2, MidpointRounding.AwayFromZero).ToString().Split('.');
             var distanceValue1 = int.Parse(distanceValues[0]);
             var distanceString1 = string.Empty;
 

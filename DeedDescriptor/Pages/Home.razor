@@ -61,6 +61,30 @@ InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file
                             <RadzenStack Gap="1rem">
                                 <RadzenRow AlignItems="AlignItems.Center">
                                     <RadzenColumn Size="12" SizeMD="4">
+                                        <RadzenLabel Text="Direction From" Component="DirectionFromId" />
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="12" SizeMD="8">
+                                        <RadzenDropDown @bind-Value="deedData.DirectionFrom" Data="Directions" Style="width: 100%;" />
+                                    </RadzenColumn>
+                                </RadzenRow>
+                                <RadzenRow AlignItems="AlignItems.Center">
+                                    <RadzenColumn Size="12" SizeMD="4">
+                                        <RadzenDropDown @bind-Value="deedData.MunicipalityType" Data="MunicipalityLabels" Style="width: 100%;" />
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="12" SizeMD="8">
+                                        <RadzenTextBox @bind-Value="deedData.MunicipalityName" Style="width: 100%;"></RadzenTextBox>
+                                    </RadzenColumn>
+                                </RadzenRow>
+                                <RadzenRow AlignItems="AlignItems.Center">
+                                    <RadzenColumn Size="12" SizeMD="4">
+                                        <RadzenLabel Text="Side of Road" Component="SideOfRoadId" />
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="12" SizeMD="8">
+                                        <RadzenDropDown @bind-Value="deedData.SideOfRoad" Data="Directions" Style="width: 100%;" />
+                                    </RadzenColumn>
+                                </RadzenRow>
+                                <RadzenRow AlignItems="AlignItems.Center">
+                                    <RadzenColumn Size="12" SizeMD="4">
                                         <RadzenLabel Text="Road Name" Component="NameId" />
                                     </RadzenColumn>
                                     <RadzenColumn Size="12" SizeMD="8">
@@ -72,15 +96,15 @@ InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file
                                         <RadzenLabel Text="Street Width" Component="StreetWidthId" />
                                     </RadzenColumn>
                                     <RadzenColumn Size="12" SizeMD="8">
-                                        <RadzenNumeric @bind-Value="deedData.StreetWidth" Style="width: 100%;"></RadzenNumeric>
+                                        <RadzenTextBox @bind-Value="deedData.StreetWidth" Style="width: 100%;"></RadzenTextBox>
                                     </RadzenColumn>
                                 </RadzenRow>
                                 <RadzenRow AlignItems="AlignItems.Center">
                                     <RadzenColumn Size="12" SizeMD="4">
-                                        <RadzenLabel Text="Township" Component="TownshipId" />
+                                        <RadzenDropDown @bind-Value="deedData.RegionType" Data="MunicipalityLabels" Style="width: 100%;" />
                                     </RadzenColumn>
                                     <RadzenColumn Size="12" SizeMD="8">
-                                        <RadzenTextBox @bind-Value="deedData.Township" Style="width: 100%;"></RadzenTextBox>
+                                        <RadzenTextBox @bind-Value="deedData.RegionName" Style="width: 100%;"></RadzenTextBox>
                                     </RadzenColumn>
                                 </RadzenRow>
                                 <RadzenRow AlignItems="AlignItems.Center">
@@ -96,15 +120,15 @@ InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file
                                         <RadzenLabel Text="State" Component="StateId" />
                                     </RadzenColumn>
                                     <RadzenColumn Size="12" SizeMD="8">
-                                        <RadzenTextBox @bind-Value="deedData.County" Style="width: 100%;"></RadzenTextBox>
+                                        <RadzenTextBox @bind-Value="deedData.State" Style="width: 100%;"></RadzenTextBox>
                                     </RadzenColumn>
                                 </RadzenRow>
                                 <RadzenRow AlignItems="AlignItems.Center">
                                     <RadzenColumn Size="12" SizeMD="4">
-                                        <RadzenLabel Text="Date" Component="DateId" />
+                                        <RadzenLabel Text="Date of Reference Plan" Component="DateId" />
                                     </RadzenColumn>
                                     <RadzenColumn Size="12" SizeMD="8">
-                                        <RadzenDatePicker @bind-Value="deedData.Date" Style="width: 100%;"></RadzenDatePicker>
+                                        <RadzenDatePicker @bind-Value="deedData.Date" DateFormat="yyyy-MM-dd" Style="width: 100%;"></RadzenDatePicker>
                                     </RadzenColumn>
                                 </RadzenRow>
                                 <RadzenRow AlignItems="AlignItems.Center">
@@ -188,8 +212,8 @@ InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file
         <RadzenTabsItem Text="Deed Description">
             <RadzenCard Style="height:100%">
                 <RadzenButton Text="Generate Description" Disabled=@(shapes == null || !shapes.Any()) Click="@GenerateDescription" />
-                @* <RadzenHtmlEditor Rows="25" Style="width:100%;height:100%;word-wrap:normal;" @bind-Value=@DeedDescription /> *@
-                <RadzenTextArea Rows="25" Style="width:100%;height:100%;word-wrap:normal;" @bind-Value=@DeedDescription />
+                <RadzenHtmlEditor Rows="25" Style="width:100%;height:100%;word-wrap:normal;" @bind-Value=@DeedDescription />
+                @* <RadzenTextArea Rows="25" Style="width:100%;height:100%;word-wrap:normal;" @bind-Value=@DeedDescription /> *@
             </RadzenCard>
         </RadzenTabsItem>
     </Tabs>
@@ -207,147 +231,156 @@ InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file
     private string DeedDescription { get; set; } = "";
     private Guid mainOwnerKey { get; set; }
     private List<KeyValuePair<Guid, OwnerTaxID>> propertyOwnersList;
+    private List<string> Directions = new List<string>() { "North","North-West", "North-East", "South", "South-West", "South-East", "East", "West" };
+    private List<string> MunicipalityLabels = new List<string>() { "City", "Borough", "Township", "Town", "Municipality", "Village" };
 
     protected override async Task OnInitializedAsync()
     {
         deedData = new DeedData();
-
+        deedData.MunicipalityType = MunicipalityLabels[0];
+        deedData.RegionType = MunicipalityLabels[2];
         mainOwnerKey = Guid.NewGuid();
         deedData.AdjoiningPropertyOwners[mainOwnerKey] = deedData.OwnerTaxID;
 
         propertyOwnersList = deedData.AdjoiningPropertyOwners.ToList();
     }
 
-    private void GenerateDescription()
+    public void GenerateDescription()
     {
-        DeedDescription = string.Join("", shapes.Select(s => s.TranslateToDeedDescription()));
+        string x = HtmlHelper.Head;
+        // DeedDescription = string.Join("", shapes.Select(s => s.TranslateToDeedDescription()));
 
-//         var sb = new StringBuilder();
+        var sb = new StringBuilder();
 
-//         sb.AppendLine(
-//             @"<html>
+        sb.AppendLine(
+            @"<html>
 
-// <head>
-//     <meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"">
-//     <meta name=""Generator"" content=""Microsoft Word 15 (filtered)"">
-//     <style>
-//     <!--
-//      /* Font Definitions */
-//      @font-face
-//         {font-family:""Cambria Math"";
-//         panose-1:2 4 5 3 5 4 6 3 2 4;}
-//      @font-face
-//         {font-family:Georgia;
-//         panose-1:2 4 5 2 5 4 5 2 3 3;}
-//      @font-face
-//         {font-family:""Open Sans"";
-//         panose-1:2 11 6 6 3 5 4 2 2 4;}
-//      /* Style Definitions */
-//      p.MsoNormal, li.MsoNormal, div.MsoNormal
-//         {margin-top:0in;
-//         margin-right:0in;
-//         margin-bottom:0in;
-//         margin-left:-.05pt;
-//         text-indent:-.05pt;
-//         font-size:10.0pt;
-//         font-family:""Open Sans"",sans-serif;
-//         position:relative;
-//         top:.5pt;}
-//      p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
-//         {margin-top:0in;
-//         margin-right:0in;
-//         margin-bottom:0in;
-//         margin-left:.5in;
-//         text-indent:-.05pt;
-//         font-size:10.0pt;
-//         font-family:""Open Sans"",sans-serif;
-//         position:relative;
-//         top:.5pt;}
-//      p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
-//         {margin-top:0in;
-//         margin-right:0in;
-//         margin-bottom:0in;
-//         margin-left:.5in;
-//         text-indent:-.05pt;
-//         font-size:10.0pt;
-//         font-family:""Open Sans"",sans-serif;
-//         position:relative;
-//         top:.5pt;}
-//      p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
-//         {margin-top:0in;
-//         margin-right:0in;
-//         margin-bottom:0in;
-//         margin-left:.5in;
-//         text-indent:-.05pt;
-//         font-size:10.0pt;
-//         font-family:""Open Sans"",sans-serif;
-//         position:relative;
-//         top:.5pt;}
-//      p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
-//         {margin-top:0in;
-//         margin-right:0in;
-//         margin-bottom:0in;
-//         margin-left:.5in;
-//         text-indent:-.05pt;
-//         font-size:10.0pt;
-//         font-family:""Open Sans"",sans-serif;
-//         position:relative;
-//         top:.5pt;}
-//      .MsoChpDefault
-//         {font-size:10.0pt;
-//         font-family:""Open Sans"",sans-serif;}
-//      .MsoPapDefault
-//         {text-indent:-.05pt;}
-//      /* Page Definitions */
-//      @page WordSection1
-//         {size:8.5in 11.0in;
-//         margin:1.0in 1.25in 1.0in 1.25in;}
-//      div.WordSection1
-//         {page:WordSection1;}
-//      /* List Definitions */
-//      ol
-//         {margin-bottom:0in;}
-//      ul
-//         {margin-bottom:0in;}
-//     -->
-//     </style>
+<head>
+    <meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"">
+    <meta name=""Generator"" content=""Microsoft Word 15 (filtered)"">
+    <style>
+     /* Font Definitions */
+     @font-face
+        {font-family:""Cambria Math"";
+        panose-1:2 4 5 3 5 4 6 3 2 4;}
+     @font-face
+        {font-family:Georgia;
+        panose-1:2 4 5 2 5 4 5 2 3 3;}
+     @font-face
+        {font-family:""Open Sans"";
+        panose-1:2 11 6 6 3 5 4 2 2 4;}
+     /* Style Definitions */
+     p.MsoNormal, li.MsoNormal, div.MsoNormal
+        {margin-top:0in;
+        margin-right:0in;
+        margin-bottom:0in;
+        margin-left:-.05pt;
+        text-indent:-.05pt;
+        font-size:10.0pt;
+        font-family:""Open Sans"",sans-serif;
+        position:relative;
+        top:.5pt;}
+     p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+        {margin-top:0in;
+        margin-right:0in;
+        margin-bottom:0in;
+        margin-left:.5in;
+        text-indent:-.05pt;
+        font-size:10.0pt;
+        font-family:""Open Sans"",sans-serif;
+        position:relative;
+        top:.5pt;}
+     p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
+        {margin-top:0in;
+        margin-right:0in;
+        margin-bottom:0in;
+        margin-left:.5in;
+        text-indent:-.05pt;
+        font-size:10.0pt;
+        font-family:""Open Sans"",sans-serif;
+        position:relative;
+        top:.5pt;}
+     p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
+        {margin-top:0in;
+        margin-right:0in;
+        margin-bottom:0in;
+        margin-left:.5in;
+        text-indent:-.05pt;
+        font-size:10.0pt;
+        font-family:""Open Sans"",sans-serif;
+        position:relative;
+        top:.5pt;}
+     p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
+        {margin-top:0in;
+        margin-right:0in;
+        margin-bottom:0in;
+        margin-left:.5in;
+        text-indent:-.05pt;
+        font-size:10.0pt;
+        font-family:""Open Sans"",sans-serif;
+        position:relative;
+        top:.5pt;}
+     .MsoChpDefault
+        {font-size:10.0pt;
+        font-family:""Open Sans"",sans-serif;}
+     .MsoPapDefault
+        {text-indent:-.05pt;}
+     /* Page Definitions */
+     @page WordSection1
+        {size:8.5in 11.0in;
+        margin:1.0in 1.25in 1.0in 1.25in;}
+     div.WordSection1
+        {page:WordSection1;}
+     /* List Definitions */
+     ol
+        {margin-bottom:0in;}
+     ul
+        {margin-bottom:0in;}
+    </style>
 
-// </head>"
-// );
+</head>"
+);
 
-//         sb.AppendLine("""<body lang="EN-US" style='word-wrap:break-word'>""");
-//         sb.AppendLine("""<div class="WordSection1">""");
+        sb.AppendLine("""<body lang="EN-US" style='word-wrap:break-word'>""");
+        sb.AppendLine("""<div class="WordSection1">""");
 
-//         sb.AppendLine(
-//         @"<p class=""MsoNormal"" align=""center"" style='margin-left:0in;text-align:center;text-indent:-.1pt'>
-//             <a name=""_Hlk134388447"">
-//                 <b>
-//                     <span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>
-//                          DEED  DESCRIPTION
-//                     </span>
-//                 </b>
-//             </a>
-//         </p>"
-//         );
-//         sb.AppendLine(
-//            $@"<p class=""MsoNormal"" align=""center"" style='margin-left:0in;text-align:center;text-indent:-.1pt'>
-//                 <b>
-//                     <span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>
-//                 {deedData.OwnerTaxID.Name}  
-//                     </span>
-//                 </b>
-//             </p>"
-//         );
-//         sb.AppendLine($@"<p class=""MsoNormal"" align=""center"" style='margin-left:0in;text-align:center;text-indent:-.1pt'><b><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>TAX {(deedData.OwnerTaxID.IsTaxMap ? "MAP #" : "PIN")} {deedData.OwnerTaxID.IDNumber} ({deedData.Area} Acres)</span></b></p>");
+        sb.AppendLine(
+        @"<p class=""MsoNormal"" align=""center"" style='margin-left:0in;text-align:center;text-indent:-.1pt'>
+            <a name=""_Hlk134388447"">
+                <b>
+                    <span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>
+                         DEED  DESCRIPTION
+                    </span>
+                </b>
+            </a>
+        </p>"
+        );
+        sb.AppendLine(
+           $@"<p class=""MsoNormal"" align=""center"" style='margin-left:0in;text-align:center;text-indent:-.1pt'>
+                <b>
+                    <span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>
+            {deedData.OwnerTaxID.Name}  
+                    </span>
+                </b>
+            </p>"
+        );
+        sb.AppendLine($@"<p class=""MsoNormal"" align=""center"" style='margin-left:0in;text-align:center;text-indent:-.1pt'><b><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>TAX {(deedData.OwnerTaxID.IsTaxMap ? "MAP #" : "PIN")} {deedData.OwnerTaxID.IDNumber} ({deedData.Area} Acres)</span></b></p>");
 
-//         sb.AppendLine(@"<p class=MsoNormal align=center style='margin-left:0in;text-align:center;text-indent:-.1pt'><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>&nbsp;</span></p><p class=MsoNormal align=center style='margin-left:0in;text-align:center;text-indent:-.1pt'><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>&nbsp;</span></p>");
-//         sb.AppendLine(@"<p class=MsoNormal align=center style='margin-left:0in;text-align:center;text-indent:-.1pt'><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>&nbsp;</span></p>");
-//         sb.AppendLine(@"<p class=MsoNormal align=center style='margin-left:0in;text-align:center;text-indent:-.1pt'><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>&nbsp;</span></p>");
-//         sb.AppendLine("</div>");
-//         sb.AppendLine("</body>");
-//         sb.AppendLine("</html>");
         
-//         DeedDescription = sb.ToString();
+        sb.AppendLine(@"<p class=MsoNormal align=center style='margin-left:0in;text-align:center;text-indent:-.1pt'><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>&nbsp;</span></p>");
+        sb.AppendLine(@"<p class=MsoNormal align=center style='margin-left:0in;text-align:center;text-indent:-.1pt'><span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>&nbsp;</span></p>");
+        sb.Append($@"<p class=MsoNormal style='margin-left:0in;text-indent:10pt'><b>
+                        <span style='font-size:12.0pt; font-family:""Times New Roman"",serif;color:red'></span></b>
+                        <span style='font-size:12.0pt;font-family:""Times New Roman"",serif'>
+                            ALL THAT CERTAIN tract or parcel of land located {deedData.DirectionFrom} of the {deedData.MunicipalityType} of {deedData.MunicipalityName}
+                            and on the {deedData.SideOfRoad} side of {deedData.StreetName}, a street of {deedData.StreetWidth}, situated in the
+                            {deedData.RegionType} of {deedData.RegionName}, County of {deedData.County}, and {deedData.State}, having 
+                            Tax {(deedData.OwnerTaxID.IsTaxMap ? "Map #" : "Pin")} {deedData.OwnerTaxID.IDNumber}, bounded and described in accordance with a survey prepared for the {deedData.ReferencePlan} dated {deedData.Date}, as follows to wit: </span></p>");
+        sb.AppendLine("</div>");
+        sb.AppendLine("</body>");
+        sb.AppendLine("</html>");
+        
+        DeedDescription = sb.ToString();
     }
 
     void OnChange(byte[] value, string name)
